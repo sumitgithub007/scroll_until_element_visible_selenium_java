@@ -1,0 +1,72 @@
+package SeleniumExcel;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class ExcelCode {
+
+	public static WebDriver driver=null ;
+	JavascriptExecutor js1 = (JavascriptExecutor) driver;
+	static  String pageLoadStatus = null;
+	 static JavascriptExecutor js;
+	public static void waitForPageLoad() {
+	do {
+	js = (JavascriptExecutor) driver;
+	pageLoadStatus = (String)js.executeScript("return document.readyState");
+	} while ( !pageLoadStatus.equals("complete") );
+	System.out.println("Page Loaded.");
+	}
+
+		public  boolean isElementVisibleInViewport(By element) throws InterruptedException {
+			
+			 
+	 			Thread.sleep(1400);
+	 			js1.executeScript("window.scrollBy(0,250)", "");
+	 		 
+			 
+	        return (Boolean)((JavascriptExecutor)driver).executeScript(
+	            "var rect = arguments[0].getBoundingClientRect();" +
+	            "return (" +
+	            "rect.top >= 0 && " +
+	            "rect.left >= 0 && " +
+	            "rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && " +
+	            "rect.right <= (window.innerWidth || document.documentElement.clientWidth)" +
+	            ");", driver.findElement(element));
+	    }
+	public static void main(String[] args) throws InterruptedException {
+		ExcelCode c = new ExcelCode();
+		int rownum = 2;
+		List<String> alist = ReadCompanyName.readExcel();
+		ChromeOptions options = new ChromeOptions();
+	
+		options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.208 Safari/537.36");
+		 c.driver = new ChromeDriver(options);
+ 		c.driver.get("https://www.noon.com/uae-en/");
+ 		waitForPageLoad();
+ 		By ele= By.xpath("//*[text()='Maximize your savings']");
+		 
+ 		Object js ;
+ 		js= ((JavascriptExecutor)driver).executeScript(
+	            "var rect = arguments[0].getBoundingClientRect();" +
+	            "return (" +
+	            "rect.top >= 0 && " +
+	            "rect.left >= 0 && " +
+	            "rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && " +
+	            "rect.right <= (window.innerWidth || document.documentElement.clientWidth)" +
+	            ");", driver.findElement(ele));
+ 		while(!c.isElementVisibleInViewport(ele))
+ 		{
+ 			System.out.println("k");
+ 		}
+ 		System.out.println("element visible");
+ 	 
+	}
+		
+	
+}
